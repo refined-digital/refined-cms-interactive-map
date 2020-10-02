@@ -18,17 +18,15 @@
         <div class="map__content">{!! $mapSettings->content->value !!}</div>
       @endif
 
-      <div class="content-block__text">
-        @if($categories->count())
-          <nav>
-            <ul class="map__categories">
-              @foreach ($categories as $cat)
-                <li data-id="{{ $cat->id }}">{{ $cat->name }}</li>
-              @endforeach
-            </ul>
-          </nav>
-        @endif
-      </div>
+      @if($categories->count())
+        <nav class="map__categories">
+          <ul>
+            @foreach ($categories as $cat)
+              <li data-id="{{ $cat->id }}">{{ $cat->name }}</li>
+            @endforeach
+          </ul>
+        </nav>
+      @endif
 
       @if (isset($mapSettings->map_link) && $mapSettings->map_link->value)
       <footer class="content-block__footer">
