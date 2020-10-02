@@ -92,8 +92,12 @@ interactiveMap = function(options) {
   setZoom(bounds);
 
   const categories = document.querySelectorAll('.map__categories li');
+  const klass = 'map__category-item--active';
   categories.forEach(cat => {
     cat.addEventListener('click', function() {
+      categories.forEach(cat => { cat.classList.remove(klass) })
+      cat.classList.add(klass)
+
       const bounds = new window.google.maps.LatLngBounds();
       const id = parseInt(this.dataset.id, 10);
       markers.forEach(marker => {
