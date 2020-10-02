@@ -1,0 +1,66 @@
+@mixin respond($px) {
+  @if unitless($px) {
+    $px: $px * 1px;
+  }
+
+  @media only screen and (max-width: $px) {
+    @content;
+  }
+}
+
+$respondSmall: 850px;
+
+.map {
+  .holder {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include respond($respondSmall) {
+      flex-wrap: wrap;
+      padding: 0;
+    }
+  }
+
+  &__left {
+    flex: 0 0 60%;
+    height: 700px;
+    @include respond($respondSmall) {
+      height: 500px;
+    }
+  }
+
+  &__right {
+    flex: 0 0 40%;
+    padding: 20px 60px;
+  }
+
+  @include respond($respondSmall) {
+    &__left, &__right {
+      flex: 0 0 100%;
+    }
+  }
+
+  #map__holder {
+    height: 100%;
+    width: 100%;
+  }
+
+  &__content {
+    margin: 40px 0;
+  }
+
+  &__categories {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      cursor: pointer;
+      margin: 0 0 4px;
+      padding: 0;
+    }
+  }
+}
+
+

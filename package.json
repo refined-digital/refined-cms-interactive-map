@@ -1,0 +1,33 @@
+{
+  "name": "@refineddigital/cms-interactive-map",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run development",
+    "development": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "hot": "NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "publish-and-tag": "git push --tags && git push origin master",
+    "version:patch": "npm version patch && npm run publish-and-tag",
+    "version:minor": "npm version minor && npm run publish-and-tag",
+    "version:marjor": "npm version major && npm run publish-and-tag"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/refineddigital/cms-interactive-map.git"
+  },
+  "author": "Matthias Law",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/refineddigital/cms-interactive-map/issues"
+  },
+  "homepage": "https://gitlab.com/refineddigital/cms-interactive-map#README",
+  "dependencies": {},
+  "devDependencies": {
+    "laravel-mix": "^5.0.5",
+    "sass": "^1.26.11",
+    "sass-loader": "^10.0.2",
+    "vue-template-compiler": "^2.6.12"
+  }
+}
