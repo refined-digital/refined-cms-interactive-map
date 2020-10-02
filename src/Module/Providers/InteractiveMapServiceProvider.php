@@ -4,7 +4,8 @@ namespace RefinedDigital\InteractiveMap\Module\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use RefinedDigital\CMS\Modules\Core\Aggregates\ModuleAggregate;
-use RefinedDigital\CMS\Modules\Core\Aggregates\CustomModuleRouteAggregate;
+use RefinedDigital\CMS\Modules\Core\Aggregates\RouteAggregate;
+use RefinedDigital\InteractiveMap\Commands\Install;
 
 class InteractiveMapServiceProvider extends ServiceProvider
 {
@@ -15,10 +16,18 @@ class InteractiveMapServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->addNamespace('interactive-maps', [
+        view()->addNamespace('interactive-map', [
+            resource_path('views/templates'),
             __DIR__.'/../Resources/views',
-            base_path().'/resources/views'
         ]);
+
+        if ($this->app->runningInConsole()) {
+            if (\DB::connection()->getDatabaseName() && !\Schema::hasTable('maps')) {
+                $this->commands([
+                    Install::class
+                ]);
+            }
+        }
 
     }
 
@@ -29,9 +38,10 @@ class InteractiveMapServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        app(CustomModuleRouteAggregate::class)
+        app(RouteAggregate::class)
             ->addRouteFile('interactive-map', __DIR__.'/../Http/routes.php');
 
+        $this->mergeConfigFrom(__DIR__.'/../../../config/interactive-map.php', 'interactive-map');
         $menuConfig = [
             'order' => 520,
             'name' => 'Map',

@@ -2,8 +2,8 @@
 
 namespace RefinedDigital\InteractiveMap\Module\Http\Repositories;
 
-use App\RefinedCMS\Map\Models\MapCategory;
 use RefinedDigital\CMS\Modules\Core\Http\Repositories\CoreRepository;
+use RefinedDigital\InteractiveMap\Module\Models\MapCategory;
 
 class InteractiveMapRepository extends CoreRepository
 {

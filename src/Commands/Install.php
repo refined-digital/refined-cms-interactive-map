@@ -1,6 +1,6 @@
 <?php
 
-namespace RefinedDigital\Team\Commands;
+namespace RefinedDigital\InteractiveMap\Commands;
 
 use Illuminate\Console\Command;
 use Validator;
@@ -45,6 +45,7 @@ class Install extends Command
         $this->publish();
         $this->copyTemplates();
         $this->createSymLink();
+        $this->addKeyToENV();
         $this->info('Interactive Map has been successfully installed');
     }
 
@@ -77,21 +78,21 @@ class Install extends Command
     protected function copyTemplates()
     {
         $this->output->writeln('<info>Copying Templates</info>');
-        $this->copy('templates/');
-        $this->copy('templates/includes');
+        $this->copy('templates');
     }
 
-    protected function copy($resourceDir)
+    protected function copy($localDir)
     {
-        $dir = base_path('vendor/refineddigital/cms-interactive-map/resources/views');
-        $templates = scandir($dir.$resourceDir);
+        $dir = base_path('vendor/refineddigital/cms-interactive-map/resources/views/');
+        $templates = scandir($dir.$localDir);
         array_shift($templates);array_shift($templates);
 
         if (sizeof($templates)) {
             try {
                 foreach ($templates as $template) {
-                    $contents = file_get_contents($dir.$template);
-                    file_put_contents(resource_path($resourceDir.$template), $contents);
+                  if (!is_dir($dir.$localDir.'/'.$template)) {
+                    exec('cp '.$dir.$localDir.'/'.$template.' '.resource_path('views/'.$localDir.'/'.$template));
+                  }
                 }
             } catch(\Exception $e) {
                 $this->output->writeln('<error>Failed to copy all assets</error>');
@@ -103,18 +104,21 @@ class Install extends Command
     {
         $this->output->writeln('<info>Creating Symlink</info>');
         try {
-            $link = getcwd().'/public/vendor/';
+            $link = public_path('vendor/');
             $target = '../../../vendor/refineddigital/cms-interactive-map/assets/';
 
             // create the directories
             if (!is_dir($link)) {
                 mkdir($link);
             }
+
             $link .= 'refined/';
             if (!is_dir($link)) {
                 mkdir($link);
             }
+
             $link .= 'interactive-map';
+
             if (! windows_os()) {
                 return symlink($target, $link);
             }
@@ -123,8 +127,18 @@ class Install extends Command
 
             exec("mklink /{$mode} \"{$link}\" \"{$target}\"");
         } catch(\Exception $e) {
+            print_r($e->getMessage()); echo PHP_EOL;
             $this->output->writeln('<error>Failed to install symlink</error>');
         }
+    }
+
+    protected function addKeyToEnv()
+    {
+      $file = file_get_contents(app()->environmentFilePath());
+
+      $file .= PHP_EOL.PHP_EOL.'GOOGLE_API_KEY=';
+
+      file_put_contents(app()->environmentFilePath(), $file);
     }
 
 }

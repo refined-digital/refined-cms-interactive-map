@@ -1,4 +1,4 @@
-window.gMap = function(options) {
+interactiveMap = function(options) {
   const setZoom = bounds => {
     map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
