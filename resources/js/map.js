@@ -21,7 +21,7 @@ interactiveMap = function(options) {
 
   options.data.forEach(category => {
     category.markers.forEach(mark => {
-      const marker = new google.maps.Marker({
+      const markerOptions = {
         map,
         meta: {
           categoryId: category.id
@@ -31,7 +31,13 @@ interactiveMap = function(options) {
           lat: parseFloat(mark.latitude),
           lng: parseFloat(mark.longitude),
         },
-      });
+      }
+      if (options.marker.icon) {
+        markerOptions.icon = {
+          url: options.marker.icon
+        }
+      }
+      const marker = new google.maps.Marker(markerOptions);
 
 
       markers.push(marker);
