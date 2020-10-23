@@ -12,7 +12,7 @@ interactiveMap = function(options) {
   }
 
   if (options.mapStyles) {
-    config.styles = optiosn.mapStyles;
+    config.styles = options.mapStyles;
   }
 
   const markers = [];
