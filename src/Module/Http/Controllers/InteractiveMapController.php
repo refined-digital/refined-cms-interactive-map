@@ -23,7 +23,7 @@ class InteractiveMapController extends CoreController
 
         $table = new \stdClass();
         $table->fields = [
-            (object) [ 'name' => '#', 'field' => 'id', 'sortable' => true, 'classes' => ['data-table__cell--id']],
+            // (object) [ 'name' => '#', 'field' => 'id', 'sortable' => true, 'classes' => ['data-table__cell--id']],
             (object) [ 'name' => 'Name', 'field' => 'name', 'sortable' => true],
             (object) [ 'name' => 'Category', 'field' => 'map_category', 'sortable' => false, 'type' => 'map-category'],
             (object) [ 'name' => 'Active', 'field' => 'active', 'type'=> 'select', 'options' => [1 => 'Yes', 0 => 'No'], 'sortable' => true, 'classes' => ['data-table__cell--active']],

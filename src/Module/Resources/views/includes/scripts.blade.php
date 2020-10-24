@@ -7,6 +7,9 @@
       elementId: 'map__holder',
       lat: {{ $lat }},
       lng: {{ $lng }},
+      marker: {
+        icon: '{{ asset('vendor/refined/interactive-map/img/marker.png') }}'
+      },
       data: {!! json_encode($categories) !!}
     };
 

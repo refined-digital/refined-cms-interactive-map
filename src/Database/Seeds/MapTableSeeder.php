@@ -21,6 +21,11 @@ class MapTableSeeder extends Seeder
           [ 'name' => 'Map Link', 'content' => '{"note": null, "content": "https://goo.gl/maps/QptAc9aJdcCqJJzw5", "options": [], "page_content_type_id": 3}', ],
           [ 'name' => 'Heading', 'content' => '{"note": null, "content": "On your doorstep", "options": [], "page_content_type_id": 3}', ],
           [ 'name' => 'Content', 'content' => '{"note": null, "content": "<p>This is a neighbourhood buzzing with creative energy, culture, thriving businesses and world-class eateries. Enjoy a diverse and growing community on your doorstep – meet your neighbours and be the first to experience new cafes, bars, fitness, and boutique shopping.</p>", "options": [], "page_content_type_id": 1}', ],
+          [ 'name' => 'Main Marker Name', 'content' => '{"note": null, "content": "", "options": [], "page_content_type_id": 3}', ],
+          [ 'name' => 'Main Marker Latitude', 'content' => '{"note": null, "content": "", "options": [], "page_content_type_id": 3}', ],
+          [ 'name' => 'Main Marker Longitude', 'content' => '{"note": null, "content": "", "options": [], "page_content_type_id": 3}', ],
+          [ 'name' => 'Main Marker Icon', 'content' => '{"note": "Icon here must be <strong>27px wide x 35px tall</strong>", "content": "", "options": [], "page_content_type_id": 4}', ],
+          [ 'name' => 'Marker Icon', 'content' => '{"note": "Icon here must be <strong>27px wide x 35px tall</strong>", "content": "", "options": [], "page_content_type_id": 4}', ],
         ];
 
         foreach($settings as $pos => $u) {
