@@ -20,7 +20,7 @@ interactiveMap = function(options) {
   const bounds = new window.google.maps.LatLngBounds();
 
   options.data.forEach(category => {
-    category.markers.forEach(mark => {
+    category.markers.forEach((mark, index) => {
       const markerOptions = {
         map,
         meta: {
@@ -31,6 +31,7 @@ interactiveMap = function(options) {
           lat: parseFloat(mark.latitude),
           lng: parseFloat(mark.longitude),
         },
+        zIndex: index
       }
       if (options.marker.icon) {
         markerOptions.icon = {
