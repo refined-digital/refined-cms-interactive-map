@@ -74,7 +74,8 @@ interactiveMap = function(options) {
       },
       icon: {
         url: options.masterIcon.marker
-      }
+      },
+      zIndex: markers.length + 1
     });
 
     markers.push(master);
