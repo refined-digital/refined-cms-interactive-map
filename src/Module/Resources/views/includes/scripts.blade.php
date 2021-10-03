@@ -13,6 +13,10 @@
       data: {!! json_encode($categories) !!}
     };
 
+    @if (isset($mapSettings, $mapSettings->map_styles) && $mapSettings->map_styles->value)
+      data.mapStyles = {!! $mapSettings->map_styles->value !!}
+    @endif
+
     function initMap() {
       window.interactiveMap(data);
     }
