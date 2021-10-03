@@ -17,7 +17,8 @@ class InteractiveMapServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->addNamespace('interactive-map', [
-            resource_path('views/templates'),
+            resource_path('views/interactive-map'),
+            app_path('RefinedCMS/InteractiveMap'),
             __DIR__.'/../Resources/views',
         ]);
 
