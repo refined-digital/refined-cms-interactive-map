@@ -15,8 +15,6 @@ interactiveMap = function(options) {
     config.styles = options.mapStyles;
   }
 
-  console.log(options)
-
   const markers = [];
   const map = new window.google.maps.Map(document.getElementById(options.elementId), config);
   const bounds = new window.google.maps.LatLngBounds();
