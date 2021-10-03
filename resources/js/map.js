@@ -15,6 +15,8 @@ interactiveMap = function(options) {
     config.styles = options.mapStyles;
   }
 
+  console.log(options)
+
   const markers = [];
   const map = new window.google.maps.Map(document.getElementById(options.elementId), config);
   const bounds = new window.google.maps.LatLngBounds();
@@ -47,7 +49,7 @@ interactiveMap = function(options) {
         content: `
           <div class="maps__info-window">
             <h4 class="maps__info-window-heading">${mark.name }</h4>
-            <div class="maps__info-window-content">${mark.content || '' }</div>
+            ${mark.content ? `<div class="maps__info-window-content">${mark.content}</div>` : ''}
           </div>
         `
       })
@@ -61,7 +63,7 @@ interactiveMap = function(options) {
     })
   })
 
-  if (options.masterIcon) {
+  if (options.masterIcon.show) {
     // add the master icon
     const master =  new google.maps.Marker({
       map,
@@ -74,7 +76,7 @@ interactiveMap = function(options) {
         lng: options.masterIcon.longitude,
       },
       icon: {
-        url: options.masterIcon.marker
+        url: options.masterIcon.icon
       },
       zIndex: markers.length + 1
     });
