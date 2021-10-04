@@ -15,7 +15,7 @@
         <nav class="map__categories">
           <ul>
             @foreach ($categories as $cat)
-              <li data-id="{{ $cat->id }}">{{ $cat->name }}</li>
+              <li class="map__category-item" data-id="{{ $cat->id }}">{{ $cat->name }}</li>
             @endforeach
           </ul>
         </nav>

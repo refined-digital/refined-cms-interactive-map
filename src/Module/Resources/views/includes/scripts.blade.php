@@ -17,7 +17,9 @@
         longitude: {{ $lng }},
         icon: '{{ asset('vendor/refined/interactive-map/img/marker.png') }}',
         show: true
-      }
+      },
+      categorySelector: '{{ $categorySelector }}',
+      markerSelector: '{{ $markerSelector }}'
     };
 
     @if (isset($mapSettings, $mapSettings->map_styles) && $mapSettings->map_styles->value)

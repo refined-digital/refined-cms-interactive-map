@@ -24,7 +24,8 @@ interactiveMap = function(options) {
       const markerOptions = {
         map,
         meta: {
-          categoryId: category.id
+          categoryId: category.id,
+          id: mark.id
         },
         title: mark.name,
         position: {
@@ -33,6 +34,33 @@ interactiveMap = function(options) {
         },
         zIndex: index
       }
+
+      if (mark.label) {
+        markerOptions.label = {
+          text: mark.label.text
+        }
+
+        if (mark.label.color) {
+          markerOptions.label.color = mark.label.color;
+        }
+
+        if (mark.label.className) {
+          markerOptions.label.className = mark.label.className;
+        }
+
+        if (mark.label.fontSize) {
+          markerOptions.label.fontSize = mark.label.fontSize;
+        }
+
+        if (mark.label.fontWeight) {
+          markerOptions.label.fontWeight = mark.label.fontWeight;
+        }
+
+        if (mark.label.fontFamily) {
+          markerOptions.label.fontFamily = mark.label.fontFamily;
+        }
+      }
+
       if (options.marker.icon) {
         markerOptions.icon = {
           url: options.marker.icon
@@ -99,23 +127,32 @@ interactiveMap = function(options) {
 
   setZoom(bounds);
 
-  const categories = document.querySelectorAll('.map__categories li');
-  const klass = 'map__category-item--active';
-  categories.forEach(cat => {
-    cat.addEventListener('click', function() {
-      categories.forEach(cat => { cat.classList.remove(klass) })
-      cat.classList.add(klass)
+  const setMarkers = function(data, klass, metaKey) {
+    data.forEach(item => {
+      item.addEventListener('click', function () {
+        data.forEach(item => item.classList.remove(klass))
+        item.classList.add(klass)
 
-      const bounds = new window.google.maps.LatLngBounds();
-      const id = parseInt(this.dataset.id, 10);
-      markers.forEach(marker => {
-        const visible = marker.meta.categoryId === id || marker.meta.categoryId === '*';
-        if (visible) {
-          bounds.extend(marker.getPosition());
-        }
-        marker.setVisible(visible)
-      })
-      setZoom(bounds);
-    });
-  })
+        const bounds = new window.google.maps.LatLngBounds();
+        const id = parseInt(this.dataset.id, 10);
+        markers.forEach(marker => {
+          const visible = marker.meta[metaKey] === id || marker.meta[metaKey] === '*';
+          if (visible) {
+            bounds.extend(marker.getPosition());
+          }
+          marker.setVisible(visible)
+        })
+        setZoom(bounds);
+      });
+    })
+  }
+
+  const categories = document.querySelectorAll(options.categorySelector);
+  const categoryClass = `${options.categorySelector.replace('.', '')}--active`;
+  setMarkers(categories, categoryClass, 'categoryId')
+
+  const markerItems = document.querySelectorAll(options.markerSelector);
+  const markerClass = `${options.markerSelector.replace('.', '')}--active`;
+  setMarkers(markerItems, markerClass, 'id')
+
 }
