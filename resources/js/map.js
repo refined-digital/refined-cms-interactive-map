@@ -147,7 +147,7 @@ interactiveMap = function(options) {
         setZoom(bounds);
         if (inBounds.length === 1) {
           const listener = window.google.maps.event.addListener(map, "idle", function() {
-            map.setZoom(18);
+            map.setZoom(config.pinZoomLevelLimit || 18);
             window.google.maps.event.removeListener(listener);
           });
         }
