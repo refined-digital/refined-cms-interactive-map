@@ -135,14 +135,22 @@ interactiveMap = function(options) {
 
         const bounds = new window.google.maps.LatLngBounds();
         const id = parseInt(this.dataset.id, 10);
+        const inBounds = [];
         markers.forEach(marker => {
           const visible = marker.meta[metaKey] === id || marker.meta[metaKey] === '*';
           if (visible) {
             bounds.extend(marker.getPosition());
+            inBounds.push(marker);
           }
           marker.setVisible(visible)
         })
         setZoom(bounds);
+        if (inBounds.length === 1) {
+          const listener = window.google.maps.event.addListener(map, "idle", function() {
+            map.setZoom(18);
+            window.google.maps.event.removeListener(listener);
+          });
+        }
       });
     })
   }
