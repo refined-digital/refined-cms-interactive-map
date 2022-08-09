@@ -22,13 +22,15 @@ class InteractiveMapServiceProvider extends ServiceProvider
             __DIR__.'/../Resources/views',
         ]);
 
-        if ($this->app->runningInConsole()) {
-            if (\DB::connection()->getDatabaseName() && !\Schema::hasTable('maps')) {
-                $this->commands([
-                    Install::class
-                ]);
+        try {
+            if ($this->app->runningInConsole()) {
+                if (\DB::connection()->getDatabaseName() && !\Schema::hasTable('maps')) {
+                    $this->commands([
+                        Install::class
+                    ]);
+                }
             }
-        }
+        } catch (\Exception $e) {}
 
     }
 
