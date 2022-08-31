@@ -11,32 +11,34 @@
 $respondSmall: 850px;
 
 .map {
-  .holder {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @include respond($respondSmall) {
-      flex-wrap: wrap;
-      padding: 0;
-    }
-  }
-
   &__left {
-    flex: 0 0 60%;
-    height: 700px;
+    flex: 0 0 50%;
+    min-height: 700px;
     @include respond($respondSmall) {
-      height: 500px;
+      min-height: 500px;
     }
   }
 
   &__right {
-    flex: 0 0 40%;
-    padding: 20px 60px;
+    flex: 0 0 50%;
+    padding: 80px;
+
+    @include respond($respondSmall) {
+      padding: 20px;
+    }
+
+    .link {
+      margin-top: 60px;
+    }
+
+    .heading {
+      margin-bottom: 60px;
+    }
   }
 
   @include respond($respondSmall) {
-    &__left, &__right {
+    &__left,
+    &__right {
       flex: 0 0 100%;
     }
   }
@@ -50,17 +52,64 @@ $respondSmall: 850px;
     margin: 40px 0;
   }
 
-  &__categories ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    li {
-      cursor: pointer;
-      margin: 0 0 4px;
-      padding: 0;
+  &__category {
+    &-item ul {
+      display: none;
+    }
+    &-text--active ~ ul {
+      display: block;
     }
   }
+
+  &__categories {
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      ul {
+        margin-top: 10px;
+      }
+    }
+
+    li {
+      margin: 0 0 4px;
+
+      span {
+        text-transform: uppercase;
+        transition: opacity 200ms linear;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    > ul {
+      border-bottom: 1px solid #111;
+
+      & > li {
+        border-top: 1px solid #111;
+        padding: 10px 0;
+      }
+    }
+  }
+
+  &__marker {
+    &-item {
+      display: flex;
+      span {
+        display: block;
+      }
+    }
+
+    &-text {
+      text-transform: none !important;
+    }
+  }
+
+  &__category-number {
+    flex: 0 0 20px;
+    margin-right: 5px;
+  }
 }
-
-
