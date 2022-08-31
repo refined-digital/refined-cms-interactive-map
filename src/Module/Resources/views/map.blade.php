@@ -24,5 +24,7 @@
 
 @include('interactive-map::includes.html')
 
+@include('interactive-map::includes.styles')
+
 @include('interactive-map::includes.scripts')
 
