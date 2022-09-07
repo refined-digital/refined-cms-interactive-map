@@ -23,7 +23,6 @@
                   $label = new stdClass();
                   $label->text = $showNumbers ? $text : null;
                   $label->className = 'map__marker-label';
-                  $label->color = $labelColor ?? '#000';
                   $marker->label = $label;
               }
           }

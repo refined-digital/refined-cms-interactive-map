@@ -60,9 +60,6 @@ interactiveMap = function(options) {
           markerOptions.label.fontFamily = mark.label.fontFamily;
         }
 
-        if (mark.label.color) {
-          markerOptions.label.color = mark.label.color;
-        }
       }
 
       if (options.marker.icon) {
