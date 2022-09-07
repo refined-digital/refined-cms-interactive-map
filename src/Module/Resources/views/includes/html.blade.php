@@ -1,3 +1,7 @@
+@php
+  $showNumbers = config('interactive-map.numbers_on_markers');
+  $padNumbers = config('interactive-map.pad_numbers');
+@endphp
 <div class="map flex">
   <div class="map__left fade-in-up">
     <div id="map__holder"></div>
@@ -24,7 +28,11 @@
                     @php $index ++ @endphp
                     <li class="map__marker-item" data-id="{{ $marker->id }}">
                     <span class="map__category-number">
-                      {{ $index }}
+                      @if ($padNumbers)
+                        {{ str_pad($index, 2, '0', STR_PAD_LEFT) }}
+                      @else
+                        {{ $index }}
+                      @endif
                     </span>
                       <span class="map__marker-text">
                       {{ $marker->name }}
