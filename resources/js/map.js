@@ -130,14 +130,27 @@ interactiveMap = function(options) {
   const setMarkers = function(data, klass, metaKey) {
     data.forEach(item => {
       item.addEventListener('click', function () {
-        data.forEach(item => item.classList.remove(klass))
-        item.classList.add(klass)
+        console.log(item);
+        data.forEach(itm => {
+          console.log(itm);
+          if (itm.dataset.id !== item.dataset.id) {
+            itm.classList.remove(klass)
+          }
+        })
+
+        const close = item.classList.contains(klass);
+
+        if (close) {
+          item.classList.remove(klass)
+        } else {
+          item.classList.add(klass)
+        }
 
         const bounds = new window.google.maps.LatLngBounds();
         const id = parseInt(this.dataset.id, 10);
         const inBounds = [];
         markers.forEach(marker => {
-          const visible = marker.meta[metaKey] === id || marker.meta[metaKey] === '*';
+          const visible = marker.meta[metaKey] === id || marker.meta[metaKey] === '*' || close;
           if (visible) {
             bounds.extend(marker.getPosition());
             inBounds.push(marker);
