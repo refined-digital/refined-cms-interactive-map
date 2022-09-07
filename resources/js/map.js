@@ -59,6 +59,10 @@ interactiveMap = function(options) {
         if (mark.label.fontFamily) {
           markerOptions.label.fontFamily = mark.label.fontFamily;
         }
+
+        if (mark.label.color) {
+          markerOptions.label.color = mark.label.color;
+        }
       }
 
       if (options.marker.icon) {
@@ -66,6 +70,8 @@ interactiveMap = function(options) {
           url: options.marker.icon
         }
       }
+
+
       const marker = new google.maps.Marker(markerOptions);
 
 
