@@ -1,6 +1,6 @@
 {
   "name": "@refineddigital/cms-interactive-map",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "scripts": {
     "dev": "npm run development",
     "development": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
