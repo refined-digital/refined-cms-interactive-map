@@ -130,9 +130,7 @@ interactiveMap = function(options) {
   const setMarkers = function(data, klass, metaKey) {
     data.forEach(item => {
       item.addEventListener('click', function () {
-        console.log(item);
         data.forEach(itm => {
-          console.log(itm);
           if (itm.dataset.id !== item.dataset.id) {
             itm.classList.remove(klass)
           }
