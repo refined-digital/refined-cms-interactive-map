@@ -7,8 +7,6 @@
   $markerSelector = '.map__marker-item';
   $showNumbers = config('interactive-map.numbers_on_markers');
   $padNumbers = config('interactive-map.pad_numbers');
-    help()->trace($showNumbers);
-    help()->trace($padNumbers,1);
 
   if ($categories->count()) {
       $c = 0;
