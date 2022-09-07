@@ -32,6 +32,10 @@ class InteractiveMapServiceProvider extends ServiceProvider
             }
         } catch (\Exception $e) {}
 
+        $this->publishes([
+            __DIR__.'/../../../config/interactive-map.php' => config_path('interactive-map.php'),
+        ], 'interactive-map');
+
     }
 
     /**
@@ -57,6 +61,8 @@ class InteractiveMapServiceProvider extends ServiceProvider
                 (object) [ 'name' => 'Settings', 'route' => ['settings.index', 'interactive-map'], 'activeFor' => ['settings']],
             ]
         ];
+
+        $this->mergeConfigFrom(__DIR__.'/../../../config/interactive-map.php', 'interactive-map');
 
         app(ModuleAggregate::class)
             ->addMenuItem($menuConfig);
