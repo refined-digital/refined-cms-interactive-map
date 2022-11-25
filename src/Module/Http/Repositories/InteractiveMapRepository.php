@@ -25,13 +25,35 @@ class InteractiveMapRepository extends CoreRepository
 
     public function getMarkersForFront()
     {
-      $categories = MapCategory::with(['markers' => function($q) {
-                $q->orderBy('position','asc');
-              }])
-              ->whereActive(1)
-              ->orderBy('position')
-              ->get()
+      $data = MapCategory::with(['markers' => function($q) {
+            $q->whereActive(1)
+              ->orderBy('position','asc');
+          }])
+          ->select(['id','name'])
+          ->whereActive(1)
+          ->orderBy('position')
+          ->get()
       ;
+
+      $categories = collect([]);
+      if ($data->count()) {
+          foreach ($data as $category) {
+              $markers = collect([]);
+              foreach ($category->markers as $marker) {
+                  $item = new \stdClass();
+                  $item->id = $marker->id;
+                  $item->name = $marker->name;
+                  $item->latitude = $marker->latitude;
+                  $item->longitude = $marker->longitude;
+                  $markers->push($item);
+              }
+              $cat = new \stdClass();
+              $cat->id = $category->id;
+              $cat->name = $category->name;
+              $cat->markers = $markers;
+              $categories->push($cat);
+          }
+      }
 
       return $categories;
     }

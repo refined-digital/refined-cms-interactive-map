@@ -1,136 +1,115 @@
 interactiveMap = function(options) {
-  const setZoom = bounds => {
+  let openInfoWindow;
+
+  const setZoom = (bounds, map) => {
     map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
   }
 
-  let openInfoWindow = null;
-
-  const config = {
-    center: { lat: options.lat, lng: options.lng, },
-    zoom: 12,
-  }
-
-  if (options.mapStyles) {
-    config.styles = options.mapStyles;
-  }
-
-  const markers = [];
-  const map = new window.google.maps.Map(document.getElementById(options.elementId), config);
-  const bounds = new window.google.maps.LatLngBounds();
-
-  options.data.forEach(category => {
-    category.markers.forEach((mark, index) => {
-      const markerOptions = {
-        map,
-        meta: {
-          categoryId: category.id,
-          id: mark.id
-        },
-        title: mark.name,
-        position: {
-          lat: parseFloat(mark.latitude),
-          lng: parseFloat(mark.longitude),
-        },
-        zIndex: index
+  const loadMarkers = (data, map, bounds, icon = false) => {
+    const markers = [];
+    data.forEach(category => {
+      if (!category.markers.length) {
+        return;
       }
 
-      if (mark.label) {
-        markerOptions.label = {
-          text: mark.label.text
+      category.markers.forEach((pin, index) => {
+        const position = new window.google.maps.LatLng(parseFloat(pin.latitude), parseFloat(pin.longitude))
+        const markerConfig = {
+          map,
+          title: pin.name,
+          position,
+          zIndex: index,
+          meta: {
+            categoryId: category.id,
+            content: pin.content,
+            id: pin.id
+          },
         }
 
-        if (mark.label.color) {
-          markerOptions.label.color = mark.label.color;
+        if (pin.label) {
+          markerConfig.label = {
+            text: pin.label.text
+          }
+
+          if (pin.label.color) {
+            markerConfig.label.color = pin.label.color;
+          }
+
+          if (pin.label.className) {
+            markerConfig.label.className = pin.label.className;
+          }
+
+          if (pin.label.fontSize) {
+            markerConfig.label.fontSize = pin.label.fontSize;
+          }
+
+          if (pin.label.fontWeight) {
+            markerConfig.label.fontWeight = pin.label.fontWeight;
+          }
+
+          if (pin.label.fontFamily) {
+            markerConfig.label.fontFamily = pin.label.fontFamily;
+          }
+
         }
 
-        if (mark.label.className) {
-          markerOptions.label.className = mark.label.className;
+        if (icon && icon.icon) {
+          markerConfig.icon = {
+            url: icon.icon
+          }
         }
 
-        if (mark.label.fontSize) {
-          markerOptions.label.fontSize = mark.label.fontSize;
-        }
-
-        if (mark.label.fontWeight) {
-          markerOptions.label.fontWeight = mark.label.fontWeight;
-        }
-
-        if (mark.label.fontFamily) {
-          markerOptions.label.fontFamily = mark.label.fontFamily;
-        }
-
-      }
-
-      if (options.marker.icon) {
-        markerOptions.icon = {
-          url: options.marker.icon
-        }
-      }
-
-
-      const marker = new google.maps.Marker(markerOptions);
-
-
-      markers.push(marker);
-      bounds.extend(marker.getPosition());
-      const infoWindow = new google.maps.InfoWindow({
-        content: `
-          <div class="maps__info-window">
-            <h4 class="maps__info-window-heading">${mark.name }</h4>
-            ${mark.content ? `<div class="maps__info-window-content">${mark.content}</div>` : ''}
-          </div>
-        `
-      })
-      marker.addListener('click', function() {
-        if (openInfoWindow) {
-          openInfoWindow.close();
-        }
-        infoWindow.open(map, marker);
-        openInfoWindow = infoWindow;
+        const marker = new window.google.maps.Marker(markerConfig);
+        markers.push(marker);
+        bounds.extend(position);
       })
     })
-  })
 
-  if (options.masterIcon.show) {
-    // add the master icon
-    const master =  new google.maps.Marker({
+    return markers ;
+  }
+
+  const loadMasterMarker = (data, map, bounds, zIndex) => {
+    const position = new window.google.maps.LatLng(parseFloat(data.latitude), parseFloat(data.longitude))
+    const master =  new window.google.maps.Marker({
       map,
       meta: {
         categoryId: '*'
       },
-      title: options.masterIcon.name,
-      position: {
-        lat: options.masterIcon.latitude,
-        lng: options.masterIcon.longitude,
-      },
+      title: data.name,
+      position,
       icon: {
-        url: options.masterIcon.icon
+        url: data.icon
       },
-      zIndex: markers.length + 1
+      zIndex
     });
 
-    markers.push(master);
-    bounds.extend(master.getPosition());
-    const infoWindow = new google.maps.InfoWindow({
+    bounds.extend(position);
+
+    return master;
+  }
+
+  const setInfoWindow = (marker, map) => {
+    const infoWindow = new window.google.maps.InfoWindow({
       content: `
         <div class="maps__info-window">
-          <h4 class="maps__info-window-heading">${options.masterIcon.name}</h4>
+          <h4 class="maps__info-window-heading">${marker.title }</h4>
+          ${marker.meta.content ? `<div class="maps__info-window-content">${marker.meta.content}</div>` : ''}
         </div>
       `
     })
-    master.addListener('click', function() {
+
+    marker.addListener('click', function() {
       if (openInfoWindow) {
         openInfoWindow.close();
       }
-      infoWindow.open(map, master);
+      infoWindow.open(map, marker);
       openInfoWindow = infoWindow;
     })
   }
 
-  setZoom(bounds);
 
-  const setMarkers = function(data, klass, metaKey) {
+  const setMarkers = function(data, map, klass, metaKey, setZoom) {
     data.forEach(item => {
       item.addEventListener('click', function () {
         data.forEach(itm => {
@@ -158,7 +137,9 @@ interactiveMap = function(options) {
           }
           marker.setVisible(visible)
         })
-        setZoom(bounds);
+
+        setZoom(bounds, map);
+
         if (inBounds.length === 1) {
           const listener = window.google.maps.event.addListener(map, "idle", function() {
             map.setZoom(options.pinZoomLevelLimit || 18);
@@ -169,12 +150,42 @@ interactiveMap = function(options) {
     })
   }
 
+
+  if (!options.data.length) {
+    return;
+  }
+
+  const config = {
+    center: { lat: options.lat, lng: options.lng, },
+    zoom: 12,
+  }
+
+  if (options.mapStyles) {
+    config.styles = options.mapStyles;
+  }
+
+  const map = new window.google.maps.Map(document.getElementById(options.elementId), config);
+  const bounds = new window.google.maps.LatLngBounds();
+
+  // load the initial markers
+  const markers = loadMarkers(options.data, map, bounds, options.marker);
+
+  // load the main marker
+  if (options.masterIcon.show) {
+    const mainMarker = loadMasterMarker(options.masterIcon, map, bounds, markers.length + 1);
+    markers.push(mainMarker);
+  }
+
+  // add the info windows
+  markers.forEach(marker => setInfoWindow(marker, map));
+
   const categories = document.querySelectorAll(options.categorySelector);
   const categoryClass = `${options.categorySelector.replace('.', '')}--active`;
-  setMarkers(categories, categoryClass, 'categoryId')
+  setMarkers(categories, map, categoryClass, 'categoryId', setZoom)
 
   const markerItems = document.querySelectorAll(options.markerSelector);
   const markerClass = `${options.markerSelector.replace('.', '')}--active`;
-  setMarkers(markerItems, markerClass, 'id')
+  setMarkers(markerItems, map, markerClass, 'id', setZoom)
 
+  setZoom(bounds, map);
 }
