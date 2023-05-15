@@ -74,7 +74,8 @@ interactiveMap = function(options) {
     const master =  new window.google.maps.Marker({
       map,
       meta: {
-        categoryId: '*'
+        categoryId: '*',
+        id: '*',
       },
       title: data.name,
       position,
@@ -110,6 +111,7 @@ interactiveMap = function(options) {
 
 
   const setMarkers = function(data, map, klass, metaKey, setZoom) {
+    console.log('options', options);
     data.forEach(item => {
       item.addEventListener('click', function () {
         data.forEach(itm => {
@@ -136,6 +138,9 @@ interactiveMap = function(options) {
             inBounds.push(marker);
           }
           marker.setVisible(visible)
+          if (options.showMasterIconOnMarkerZoom && marker.meta[metaKey] === '*') {
+            marker.setVisible(true);
+          }
         })
 
         setZoom(bounds, map);

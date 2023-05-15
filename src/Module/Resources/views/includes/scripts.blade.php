@@ -46,6 +46,10 @@
       data.masterIcon.longitude = {{ $mapSettings->main_marker_longitude->value  }}
       data.masterIcon.show = true
     @endif
+    @if (isset($mapSettings, $mapSettings->show_main_marker_on_marker_zoom) && $mapSettings->show_main_marker_on_marker_zoom->value)
+      data.showMasterIconOnMarkerZoom = {{ $mapSettings->show_main_marker_on_marker_zoom->value  }}
+      data.masterIcon.show = true
+    @endif
 
     function initMap() {
       window.interactiveMap(data);
