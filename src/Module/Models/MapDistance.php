@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use RefinedDigital\CMS\Modules\Core\Models\CoreModel;
 use Spatie\EloquentSortable\Sortable;
 
-class MapCategory extends CoreModel implements Sortable
+class MapDistance extends CoreModel implements Sortable
 {
     use SoftDeletes;
 
     protected $fillable = [
-        'active', 'map_category_id', 'name',
+        'active', 'name', 'distance',
     ];
 
     /**
@@ -29,7 +29,8 @@ class MapCategory extends CoreModel implements Sortable
                             'name' => 'Content',
                             'fields' => [
                                 [
-                                    [ 'label' => 'Name', 'name' => 'name', 'required' => true , 'attrs' => ['v-model' => 'content.name', '@keyup' => 'updateSlug' ]  ],
+                                    [ 'label' => 'Name', 'name' => 'name', 'required' => true  ],
+                                    [ 'label' => 'Distance', 'name' => 'distance', 'required' => true],
                                 ],
                             ]
                         ]
@@ -50,9 +51,4 @@ class MapCategory extends CoreModel implements Sortable
             ]
         ],
     ];
-
-    public function markers()
-    {
-      return $this->hasMany(Map::class);
-    }
 }

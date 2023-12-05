@@ -22,6 +22,16 @@ class CreateMapTable extends Migration
             $table->string('name');
         });
 
+        Schema::create('map_distances', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+            $table->softDeletes();
+            $table->boolean('active')->default(1);
+            $table->integer('position');
+            $table->string('name');
+            $table->string('distance');
+        });
+
         Schema::create('maps', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -45,6 +55,7 @@ class CreateMapTable extends Migration
     {
         //
         Schema::drop('map_categories');
+        Schema::drop('map_distances');
         Schema::drop('maps');
     }
 }

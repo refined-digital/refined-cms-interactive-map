@@ -54,10 +54,11 @@ class InteractiveMapServiceProvider extends ServiceProvider
             'name' => 'Map',
             'icon' => 'fas fa-map-marker',
             'route' => 'interactive-map',
-            'activeFor' => ['interactive-map', 'interactive-map-categories'],
+            'activeFor' => ['interactive-map', 'interactive-map-categories', 'interactive-map-distance'],
             'children' => [
                 (object) [ 'name' => 'Markers', 'route' => 'interactive-map', 'activeFor' => ['interactive-map']],
                 (object) [ 'name' => 'Categories', 'route' => 'interactive-map-categories', 'activeFor' => ['interactive-map-categories']],
+                (object) [ 'name' => 'Distances', 'route' => 'interactive-map-distance', 'activeFor' => ['interactive-map-distance']],
                 (object) [ 'name' => 'Settings', 'route' => ['settings.index', 'interactive-map'], 'activeFor' => ['settings']],
             ]
         ];

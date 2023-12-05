@@ -4,6 +4,7 @@ namespace RefinedDigital\InteractiveMap\Module\Http\Repositories;
 
 use RefinedDigital\CMS\Modules\Core\Http\Repositories\CoreRepository;
 use RefinedDigital\InteractiveMap\Module\Models\MapCategory;
+use RefinedDigital\InteractiveMap\Module\Models\MapDistance;
 
 class InteractiveMapRepository extends CoreRepository
 {
@@ -58,4 +59,8 @@ class InteractiveMapRepository extends CoreRepository
       return $categories;
     }
 
+    public function getDistances()
+    {
+        return MapDistance::active()->order()->get();
+    }
 }
