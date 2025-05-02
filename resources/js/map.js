@@ -112,8 +112,14 @@ interactiveMap = function(options) {
 
   const setMarkers = function(data, map, klass, metaKey, setZoom) {
     data.forEach(item => {
-      item.addEventListener('click', function () {
-        if (options.scrollIntoView && options.mobileAt && window.innerWidth <= options.mobileAt) {
+      item.addEventListener('click', function (e) {
+        const element = e.target.closest('li');
+        if (
+            element &&
+            element.classList.contains('map__marker-item') &&
+            options.scrollIntoView &&
+            options.mobileAt && window.innerWidth <= options.mobileAt
+        ) {
           document.querySelector('#map__holder').scrollIntoView();
         }
 
