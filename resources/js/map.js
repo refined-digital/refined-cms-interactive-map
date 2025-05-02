@@ -113,6 +113,10 @@ interactiveMap = function(options) {
   const setMarkers = function(data, map, klass, metaKey, setZoom) {
     data.forEach(item => {
       item.addEventListener('click', function () {
+        if (options.scrollIntoView && options.mobileAt && window.innerWidth <= options.mobileAt) {
+          document.querySelector('#map__holder').scrollIntoView();
+        }
+
         data.forEach(itm => {
           if (itm.dataset.id !== item.dataset.id) {
             itm.classList.remove(klass)
