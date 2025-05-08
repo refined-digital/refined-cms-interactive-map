@@ -1,5 +1,6 @@
 interactiveMap = function(options) {
   let openInfoWindow;
+  const infoWindows = {};
 
   const setZoom = (bounds, map) => {
     map.setCenter(bounds.getCenter());
@@ -100,6 +101,11 @@ interactiveMap = function(options) {
       `
     })
 
+    infoWindows[marker.meta.id] = {
+      infoWindow,
+      marker,
+    };
+
     marker.addListener('click', function() {
       if (openInfoWindow) {
         openInfoWindow.close();
@@ -114,9 +120,9 @@ interactiveMap = function(options) {
     data.forEach(item => {
       item.addEventListener('click', function (e) {
         const element = e.target.closest('li');
+        const isMarker = element && element.classList.contains('map__marker-item');
         if (
-            element &&
-            element.classList.contains('map__marker-item') &&
+            isMarker &&
             options.scrollIntoView &&
             options.mobileAt && window.innerWidth <= options.mobileAt
         ) {
@@ -135,6 +141,19 @@ interactiveMap = function(options) {
           item.classList.remove(klass)
         } else {
           item.classList.add(klass)
+        }
+
+        if (openInfoWindow && isMarker) {
+          openInfoWindow.close();
+        }
+
+
+        if (options.openInfoWindowOnNavClick && isMarker) {
+          if (infoWindows[item.dataset.id]) {
+            const { infoWindow, marker } = infoWindows[item.dataset.id];
+            infoWindow.open(map, marker);
+            openInfoWindow = infoWindow;
+          }
         }
 
         const bounds = new window.google.maps.LatLngBounds();
