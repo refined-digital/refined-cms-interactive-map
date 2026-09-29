@@ -1,0 +1,144 @@
+.map-markers__marker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+
+  @media (width <= 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.map-markers__content {
+  padding: var(--block-padding, 4rem);
+}
+
+/* markers bounce the map from side to side down the page */
+.map-markers__marker--left .map-markers__map-holder {
+  order: -1;
+}
+
+.route-map {
+  height: 100%;
+  min-height: 500px;
+}
+
+/* the card and route label mimic google's own directions embed, so they use the
+   map's roboto rather than the site fonts */
+.route-map__card,
+.route-map__label {
+  font-family: Roboto, Arial, sans-serif;
+  color: #202124;
+  background: #fff;
+  box-shadow: 0 1px 4px -1px rgb(0 0 0 / 30%);
+}
+
+.route-map__car {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.route-map__card {
+  margin: 10px;
+  padding: 12px 14px;
+  width: min(260px, calc(100vw - 80px));
+  border-radius: 2px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.route-map__stops {
+  position: relative;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+
+  /* the dotted leg between the two stops */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    bottom: 12px;
+    left: 4px;
+    border-left: 2px dotted #bdc1c6;
+  }
+}
+
+.route-map__stop {
+  position: relative;
+  padding: 3px 0 3px 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    translate: 0 -50%;
+    border-radius: 50%;
+  }
+
+  &--origin::before {
+    border: 2px solid #5f6368;
+    width: 6px;
+    height: 6px;
+  }
+
+  &--destination::before {
+    background: #ea4335;
+  }
+}
+
+.route-map__summary {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 8px;
+  padding-top: 10px;
+  border-top: 1px solid #e8eaed;
+  color: #5f6368;
+
+  strong {
+    font-weight: 500;
+    font-size: 15px;
+    color: #188038;
+  }
+}
+
+.route-map__more {
+  color: #1a73e8;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.route-map__label {
+  position: absolute;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 8px;
+  translate: -50% calc(-100% - 8px);
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  /* the little tail pointing at the route */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    translate: -50% 0;
+    border: 6px solid transparent;
+    border-top-color: #fff;
+  }
+}

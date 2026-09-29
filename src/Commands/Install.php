@@ -46,6 +46,11 @@ class Install extends Command
         $this->copyTemplates();
         $this->createSymLink();
         $this->addKeyToENV();
+
+        if ($this->confirm('Do the map categories need their own pages?')) {
+            $this->call('refinedCMS:interactive-map-pages');
+        }
+
         $this->info('Interactive Map has been successfully installed');
     }
 

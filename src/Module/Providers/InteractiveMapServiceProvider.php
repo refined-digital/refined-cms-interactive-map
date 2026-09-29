@@ -3,9 +3,12 @@
 namespace RefinedDigital\InteractiveMap\Module\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use RefinedDigital\CMS\Modules\Core\Aggregates\CustomModuleAggregate;
 use RefinedDigital\CMS\Modules\Core\Aggregates\ModuleAggregate;
 use RefinedDigital\CMS\Modules\Core\Aggregates\RouteAggregate;
+use RefinedDigital\InteractiveMap\Commands\EnablePages;
 use RefinedDigital\InteractiveMap\Commands\Install;
+use RefinedDigital\InteractiveMap\Module\Models\MapCategory;
 
 class InteractiveMapServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,14 @@ class InteractiveMapServiceProvider extends ServiceProvider
             app_path('RefinedCMS/InteractiveMap'),
             __DIR__.'/../Resources/views',
         ]);
+
+        $this->loadMigrationsFrom(__DIR__.'/../../Database/Migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                EnablePages::class
+            ]);
+        }
 
         try {
             if ($this->app->runningInConsole()) {
@@ -45,9 +56,6 @@ class InteractiveMapServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        app(RouteAggregate::class)
-            ->addRouteFile('interactive-map', __DIR__.'/../Http/routes.php');
-
         $this->mergeConfigFrom(__DIR__.'/../../../config/interactive-map.php', 'interactive-map');
         $menuConfig = [
             'order' => 520,
@@ -63,7 +71,24 @@ class InteractiveMapServiceProvider extends ServiceProvider
             ]
         ];
 
-        $this->mergeConfigFrom(__DIR__.'/../../../config/interactive-map.php', 'interactive-map');
+        // as pages, the categories register like the blog: front end urls, sitemap and
+        // the content block workspace (which keys off the categories' route name)
+        if (config('interactive-map.pages')) {
+            app(CustomModuleAggregate::class)
+                ->add(
+                    name: 'interactive-map-categories',
+                    routes: __DIR__.'/../Http/routes.php',
+                    menuConfig: $menuConfig,
+                    model: MapCategory::class,
+                    basePage: config('interactive-map.base_url'),
+                    custom: false
+                );
+
+            return;
+        }
+
+        app(RouteAggregate::class)
+            ->addRouteFile('interactive-map', __DIR__.'/../Http/routes.php');
 
         app(ModuleAggregate::class)
             ->addMenuItem($menuConfig);
